@@ -6,7 +6,7 @@ const nextConfig = {
   basePath: "/github-pages",
   images: {
     loader: "custom",
-    loaderFile: "./my-loader.ts",
+    loaderFile: "./my-loader.js",
   },
 };
 
