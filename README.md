@@ -4,7 +4,8 @@ Todo List
 
 ---
 
-user logging should have , google loggin ,and microsoft logging should be looks profesional
+user logging should have , google loggin ,and microsoft logging should be looks profesional - login html Done
+
 Home page can have fetured posts or pined top - make simple as possible in first round
 also all post visible - we might will learn something from here
 post can have likes/dislike and it's count or a graph
