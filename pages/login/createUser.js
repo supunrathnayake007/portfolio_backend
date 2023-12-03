@@ -1,7 +1,7 @@
 import { useState } from "react";
 import InputField from "../../components/input_components/inputField";
 import Button from "../../components/input_components/button";
-import { Tillana } from "next/font/google";
+import Router from "next/router";
 
 function CreateUser() {
   const [username, setUserName] = useState("");
@@ -22,15 +22,16 @@ function CreateUser() {
     //check password and confirm password are same
     if (password !== confirmationPassword) {
       setPageMessage("confirm password does not match");
+      return;
     }
-
+    // debugger;
     //call api
     const res = await fetch("/api/createUser", {
       method: "POST",
       body: JSON.stringify({ username, password }),
     }).then((t) => t.json());
 
-    let title = "";
+    let title = "came from login/createUser";
     if (res.message) {
       title = res.message;
     }
@@ -59,7 +60,7 @@ function CreateUser() {
       />
 
       <InputField
-        id={"password"}
+        id={"cPassword"}
         labelText={"Confirmation Password:"}
         callbackValue={updateConfirmationPassword}
       />
@@ -67,6 +68,9 @@ function CreateUser() {
       <div>
         <Button buttonText="Create" onButtonClick={onCreateClick} />
         <h3>{pageMessage}</h3>
+
+        {/* this is only for testing */}
+        <p>username:{username}</p>
       </div>
     </div>
   );

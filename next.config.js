@@ -6,4 +6,8 @@ const nextConfig = {
   // basePath: "/github-pages",
 };
 
-module.exports = nextConfig;
+// module.exports = nextConfig;
+
+module.exports = {
+  productionBrowserSourceMaps: true,
+};

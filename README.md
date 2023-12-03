@@ -10,3 +10,10 @@ Home page can have fetured posts or pined top - make simple as possible in first
 also all post visible - we might will learn something from here
 post can have likes/dislike and it's count or a graph
 there should be user profile
+
+Login Module
+-create user
+--passwordhash-check
+--mongodb setup - check
+--mongodb url should no be hard coded. it wrong
+--

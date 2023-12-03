@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import InputField from "../../components/input_components/inputField";
 import Button from "../../components/input_components/button";
 import Router from "next/router";

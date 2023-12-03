@@ -7,6 +7,7 @@ function InputField(props) {
   };
   let inputType = "text";
   if (id === "password") inputType = "password";
+  if (id === "cPassword") inputType = "password";
 
   return (
     <div className={styles.container}>
