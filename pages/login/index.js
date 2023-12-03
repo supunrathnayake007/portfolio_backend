@@ -6,6 +6,10 @@ import Router from "next/router";
 function Login() {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [title, setTitle] = useState("");
+  useEffect(() => {
+    setTitle(Router.query.result);
+  }, []);
 
   const updateUserName = (Username) => {
     setUserName(Username);
@@ -14,6 +18,7 @@ function Login() {
     setPassword(Password);
   };
 
+  // in this place we should call api and get a jwt and decode here
   const onLoginClick = () => {
     Router.push(
       {
@@ -23,10 +28,19 @@ function Login() {
       "/"
     );
   };
-  const onCreateClick = () => {};
+  const onCreateClick = () => {
+    Router.push(
+      {
+        pathname: "/login/createUser",
+        query: { username: username },
+      },
+      "/"
+    );
+  };
 
   return (
     <div>
+      <h2>{title}</h2>
       <InputField
         id={"username"}
         labelText={"User Name:"}
