@@ -13,7 +13,8 @@ there should be user profile
 
 Login Module
 -create user
---passwordhash-check
+--password Hash-check
 --mongodb setup - check
 --mongodb url should no be hard coded. it wrong
---
+--database insert and password promise issue (async function issue)- check
+--make username uniq and if not error message display

@@ -8,6 +8,9 @@ function CreateUser() {
   const [password, setPassword] = useState("");
   const [confirmationPassword, setConfirmationPassword] = useState("");
   const [pageMessage, setPageMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  let routerPush = false;
+  let title = "";
 
   const updateUserName = (Username) => {
     setUserName(Username);
@@ -19,22 +22,31 @@ function CreateUser() {
     setConfirmationPassword(ConfirmationPassword);
   };
   async function onCreateClick() {
-    //check password and confirm password are same
     if (password !== confirmationPassword) {
       setPageMessage("confirm password does not match");
       return;
     }
-    // debugger;
-    //call api
-    const res = await fetch("/api/createUser", {
-      method: "POST",
-      body: JSON.stringify({ username, password }),
-    }).then((t) => t.json());
+    debugger;
+    try {
+      setLoading(true);
+      const res = await fetch("/api/createUser", {
+        method: "POST",
+        body: JSON.stringify({ username, password }),
+      })
+        .then((t) => t.json())
+        .then((t) => console.log("1111 - " + t));
 
-    let title = "came from login/createUser";
-    if (res.message) {
-      title = res.message;
+      res ? "" : setPageMessage("response is not defined ");
+      title = "came from login/createUser";
+      // if (res.message) {
+      //   title = res.message;
+      // }
+    } catch (error) {
+      debugger;
+      setPageMessage(error.message);
+      return;
     }
+
     //get the result and push to the login page with relavant data
 
     Router.push(
@@ -71,6 +83,7 @@ function CreateUser() {
 
         {/* this is only for testing */}
         <p>username:{username}</p>
+        <p>{loading ? "User inserting .. " : ""}</p>
       </div>
     </div>
   );
