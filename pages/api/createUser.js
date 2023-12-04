@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { createUser } from "../../lib/mongodb";
+import { createUser } from "../../lib/mongodb.js";
 import { hashPassword } from "../../lib/bcryptHash.js";
 
 export default function (req, res) {
@@ -11,9 +11,14 @@ export default function (req, res) {
   }
 
   const { username, password } = body;
-  const passwordHash = hashPassword(password);
-
-  let result = createUser(username, passwordHash);
-
-  res.status(200).json({ result: result });
+  try {
+    hashPassword(password).then((passwordHash) => {
+      //console.log("111--passwordHash: " + passwordHash);
+      createUser(username, passwordHash).then((result) => {
+        res.status(200).json({ result: result });
+      });
+    });
+  } catch (error) {
+    res.end(error.message);
+  }
 }
