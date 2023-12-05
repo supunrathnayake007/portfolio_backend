@@ -19,15 +19,25 @@ function Login() {
   };
 
   // in this place we should call api and get a jwt and decode here
-  const onLoginClick = () => {
-    Router.push(
-      {
-        pathname: "/",
-        query: { username: username },
-      },
-      "/"
-    );
-  };
+  async function onLoginClick() {
+    let pushHome = false;
+    //call login api
+    const res = await fetch("/api/login", {
+      method: "POST",
+      body: JSON.stringify({ username, password }),
+    }).then((t) => t.json());
+
+    debugger;
+    if (pushHome) {
+      Router.push(
+        {
+          pathname: "/",
+          query: { username: username },
+        },
+        "/"
+      );
+    }
+  }
   const onCreateClick = () => {
     Router.push(
       {

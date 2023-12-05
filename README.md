@@ -17,4 +17,7 @@ Login Module
 --mongodb setup - check
 --mongodb url should no be hard coded. it wrong
 --database insert and password promise issue (async function issue)- check
---make username uniq and if not error message display
+--make username uniq and if not error message display - check
+
+-user Login
+--credentials should validate with database and should receive true or false
