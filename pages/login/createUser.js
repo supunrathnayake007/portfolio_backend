@@ -26,36 +26,42 @@ function CreateUser() {
       setPageMessage("confirm password does not match");
       return;
     }
-    debugger;
+    //debugger;
     try {
       setLoading(true);
       const res = await fetch("/api/createUser", {
         method: "POST",
         body: JSON.stringify({ username, password }),
-      })
-        .then((t) => t.json())
-        .then((t) => console.log("1111 - " + t));
+      }).then((t) => t.json()); //don't know that this do
+      setLoading(false); //this works
 
-      res ? "" : setPageMessage("response is not defined ");
+      //debugger;
+      if (res.result.error) {
+        const tempUsername = res.result.error.keyValue.username;
+        setPageMessage("Username - " + tempUsername + " - Already exist");
+        return;
+      }
+      if (res.result.acknowledged) {
+        routerPush = true;
+      }
       title = "came from login/createUser";
-      // if (res.message) {
-      //   title = res.message;
-      // }
     } catch (error) {
-      debugger;
+      //debugger;
       setPageMessage(error.message);
       return;
     }
 
     //get the result and push to the login page with relavant data
 
-    Router.push(
-      {
-        pathname: "/login",
-        query: { title: title },
-      },
-      "/"
-    );
+    if (routerPush) {
+      Router.push(
+        {
+          pathname: "/login",
+          query: { title: title },
+        },
+        "/"
+      );
+    }
   }
   return (
     <div>
