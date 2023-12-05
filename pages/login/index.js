@@ -7,6 +7,7 @@ function Login() {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [title, setTitle] = useState("");
+  const [pageMessage, setPageMessage] = useState("");
   useEffect(() => {
     setTitle(Router.query.result);
   }, []);
@@ -21,13 +22,15 @@ function Login() {
   // in this place we should call api and get a jwt and decode here
   async function onLoginClick() {
     let pushHome = false;
-    //call login api
+    setPageMessage("Authorizing ...");
     const res = await fetch("/api/login", {
       method: "POST",
       body: JSON.stringify({ username, password }),
-    }).then((t) => t.json());
-
-    debugger;
+    });
+    const responseData = await res.json();
+    if (responseData.authorized) setPageMessage("Authorized !");
+    else setPageMessage("Authorization failed !");
+    //debugger;
     if (pushHome) {
       Router.push(
         {
@@ -50,7 +53,7 @@ function Login() {
 
   return (
     <div>
-      <h2>{title}</h2>
+      <h2>{pageMessage}</h2>
       <InputField
         id={"username"}
         labelText={"User Name:"}
@@ -62,9 +65,6 @@ function Login() {
         labelText={"Password:"}
         callbackValue={updatePassword}
       />
-      {/* this only for testing */}
-      <p>username: {username}</p>
-      <p>password: {password}</p>
 
       <div>
         <Button buttonText="Login" onButtonClick={onLoginClick} />

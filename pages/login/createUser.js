@@ -51,7 +51,7 @@ function CreateUser() {
       return;
     }
 
-    //get the result and push to the login page with relavant data
+    //get the result and push to the login page with relevant data
 
     if (routerPush) {
       Router.push(

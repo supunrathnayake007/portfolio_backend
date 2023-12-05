@@ -1,10 +1,10 @@
 import jwt from "jsonwebtoken";
 import { findUser } from "../../lib/mongodb.js";
-import { hashPassword } from "../../lib/bcryptHash.js";
+import { hashPassword, compare } from "../../lib/bcryptHash.js";
 
 const KEY = "dfbdsfbsdkjbsdkjfbsdk";
 
-export default function (req, res) {
+export default async function (req, res) {
   if (!req.body) {
     req.statusCode = 404;
     res.end("Error");
@@ -13,14 +13,12 @@ export default function (req, res) {
   console.log("inside api/login ");
   const body = JSON.parse(req.body);
   const { username, password } = body;
-  //we can compare password hash and create token with auth information
+
   try {
-    const result = findUser(username).then((result) => {
-      //const hash = result.hashPassword.split(".");
-      res.status(200).json({ result: result });
-      //console.log("api/login " + result.hashPassword);
-    });
-    //console.log("api/login 2" + result.hashPassword); //we cant do any thing here
+    const hashPassword = await findUser(username);
+    const authorized = await compare(password, hashPassword);
+
+    res.json({ authorized: authorized });
   } catch (error) {
     console.log("api/login catch error " + error.message);
   }

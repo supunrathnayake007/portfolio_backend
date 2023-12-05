@@ -9,13 +9,13 @@
       "type": "node-terminal",
       "request": "launch",
       "command": "npm run dev"
-    },
-    {
-      "type": "chrome",
-      "request": "launch",
-      "name": "Launch Chrome against localhost",
-      "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}"
     }
+    // {
+    //   "type": "chrome",
+    //   "request": "launch",
+    //   "name": "Launch Chrome against localhost",
+    //   "url": "http://localhost:3000",
+    //   "webRoot": "${workspaceFolder}"
+    // }
   ]
 }
