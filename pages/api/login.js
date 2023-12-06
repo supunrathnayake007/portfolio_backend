@@ -1,8 +1,7 @@
-import jwt from "jsonwebtoken";
 import { findUser } from "../../lib/mongodb.js";
 import { hashPassword, compare } from "../../lib/bcryptHash.js";
-
-const KEY = "dfbdsfbsdkjbsdkjfbsdk";
+import { jwtSign } from "../..//lib/jsonWebToken.js";
+const KEY = "abc@123456789Abc@123456789";
 
 export default async function (req, res) {
   if (!req.body) {
@@ -15,22 +14,18 @@ export default async function (req, res) {
   const { username, password } = body;
 
   try {
-    const hashPassword = await findUser(username);
-    const authorized = await compare(password, hashPassword);
+    const result = await findUser(username);
+    const passwordHash = result.passwordHash;
+    const userGroupId = result.userGroupId;
+    const authorized = await compare(password, passwordHash);
 
-    res.json({ authorized: authorized });
+    const tokeData = {
+      username,
+      authorized,
+      userGroupId,
+    };
+    res.json(jwtSign(tokeData, "1m"));
   } catch (error) {
     console.log("api/login catch error " + error.message);
   }
-  // console.log("api/login 2" + result);
-  //return result;
-  // res.json({
-  //   token: jwt.sign(
-  //     {
-  //       username,
-  //       admin: username === "admin" && password === "admin",
-  //     },
-  //     KEY
-  //   ),
-  // });
 }

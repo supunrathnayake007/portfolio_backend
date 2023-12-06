@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import InputField from "../../components/input_components/inputField";
 import Button from "../../components/input_components/button";
+
 import Router from "next/router";
 
 function Login() {
@@ -23,13 +24,26 @@ function Login() {
   async function onLoginClick() {
     let pushHome = false;
     setPageMessage("Authorizing ...");
-    const res = await fetch("/api/login", {
+    const loginRes = await fetch("/api/login", {
       method: "POST",
       body: JSON.stringify({ username, password }),
     });
-    const responseData = await res.json();
-    if (responseData.authorized) setPageMessage("Authorized !");
-    else setPageMessage("Authorization failed !");
+    const loginResponseData = await loginRes.json();
+    const jsonWebToken = loginResponseData.token;
+    const verifyRes = await fetch("/api/verifyJwt", {
+      method: "POST",
+      body: JSON.stringify({ jsonWebToken }),
+    });
+    const verifyResponseData = await verifyRes.json();
+    const decodedToken = verifyResponseData.decodedToken;
+    debugger;
+    //token can save in local storage here
+    /////
+
+    if (decodedToken.valid) {
+      if (decodedToken.payload.authorized) setPageMessage("Authorized !");
+      else setPageMessage("Authorization failed !");
+    } else setPageMessage(decodedToken.error);
     //debugger;
     if (pushHome) {
       Router.push(
