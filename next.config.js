@@ -2,12 +2,12 @@
 const nextConfig = {
   reactStrictMode: true,
   output: "export",
-  // Add basePath
-  // basePath: "/github-pages",
+  //Add basePath
+  basePath: "/github-pages",
 };
 
-// module.exports = nextConfig;
+module.exports = nextConfig;
 
-module.exports = {
-  productionBrowserSourceMaps: true,
-};
+// module.exports = {
+//   productionBrowserSourceMaps: true,
+// };
