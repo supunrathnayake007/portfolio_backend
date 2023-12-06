@@ -4,7 +4,7 @@ const nextConfig = {
   output: "export",
   //Add basePath
   //basePath: "/github-pages",
-  basePath: "/",
+  basePath: "//social_media_clone",
 };
 
 module.exports = nextConfig;
