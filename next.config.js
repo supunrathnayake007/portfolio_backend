@@ -4,7 +4,7 @@ const nextConfig = {
   reactStrictMode: true,
   output: "export",
   //Add basePath
-  basePath: "/github-pages",
+  //basePath: "/github-pages",
   assetPrefix: !debug
     ? "https://supunrathnayake007.github.io/social_media_clone/"
     : "",
