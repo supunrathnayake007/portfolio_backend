@@ -25,6 +25,6 @@ module.exports = {
     };
   },
   assetPrefix: !debug
-    ? "https://anotherplanet-io.github.io/Next-React-Components/"
+    ? "https://supunrathnayake007.github.io/social_media_clone/"
     : "",
 };
