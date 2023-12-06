@@ -25,7 +25,7 @@ function Login() {
     try {
       let pushHome = false;
       setPageMessage("Authorizing ...");
-      const loginRes = await fetch("/api/login", {
+      const loginRes = await fetch("/social_media_clone/api/login", {
         method: "POST",
         body: JSON.stringify({ username, password }),
       });

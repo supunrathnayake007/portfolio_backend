@@ -29,7 +29,7 @@ function CreateUser() {
     //debugger;
     try {
       setLoading(true);
-      const res = await fetch("/api/createUser", {
+      const res = await fetch("/social_media_clone/api/createUser", {
         method: "POST",
         body: JSON.stringify({ username, password }),
       }).then((t) => t.json()); //don't know that this do
