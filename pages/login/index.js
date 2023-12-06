@@ -22,37 +22,42 @@ function Login() {
 
   // in this place we should call api and get a jwt and decode here
   async function onLoginClick() {
-    let pushHome = false;
-    setPageMessage("Authorizing ...");
-    const loginRes = await fetch("/api/login", {
-      method: "POST",
-      body: JSON.stringify({ username, password }),
-    });
-    const loginResponseData = await loginRes.json();
-    const jsonWebToken = loginResponseData.token;
-    const verifyRes = await fetch("/api/verifyJwt", {
-      method: "POST",
-      body: JSON.stringify({ jsonWebToken }),
-    });
-    const verifyResponseData = await verifyRes.json();
-    const decodedToken = verifyResponseData.decodedToken;
-    debugger;
-    //token can save in local storage here
-    /////
+    try {
+      let pushHome = false;
+      setPageMessage("Authorizing ...");
+      const loginRes = await fetch("/api/login", {
+        method: "POST",
+        body: JSON.stringify({ username, password }),
+      });
+      const loginResponseData = await loginRes.json();
+      const jsonWebToken = loginResponseData.token;
+      const verifyRes = await fetch("/api/verifyJwt", {
+        method: "POST",
+        body: JSON.stringify({ jsonWebToken }),
+      });
+      const verifyResponseData = await verifyRes.json();
+      const decodedToken = verifyResponseData.decodedToken;
+      debugger;
+      //token can save in local storage here
+      /////
 
-    if (decodedToken.valid) {
-      if (decodedToken.payload.authorized) setPageMessage("Authorized !");
-      else setPageMessage("Authorization failed !");
-    } else setPageMessage(decodedToken.error);
-    //debugger;
-    if (pushHome) {
-      Router.push(
-        {
-          pathname: "/",
-          query: { username: username },
-        },
-        "/"
-      );
+      if (decodedToken.valid) {
+        if (decodedToken.payload.authorized) setPageMessage("Authorized !");
+        else setPageMessage("Authorization failed !");
+      } else setPageMessage(decodedToken.error);
+      //debugger;
+      if (pushHome) {
+        Router.push(
+          {
+            pathname: "/",
+            query: { username: username },
+          },
+          "/"
+        );
+      }
+    } catch (error) {
+      setPageMessage(error.message);
+      console.log("login page catch error - " + error.message);
     }
   }
   const onCreateClick = () => {
