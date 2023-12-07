@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import InputField from "../../components/input_components/inputField";
 import Button from "../../components/input_components/button";
-
 import Router from "next/router";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Login() {
   const [username, setUserName] = useState("");
@@ -11,22 +12,32 @@ function Login() {
   const [pageMessage, setPageMessage] = useState("");
   useEffect(() => {
     if (Router.query.authorized) {
-      setPageMessage(Router.query.message);
+      toast.error(Router.query.message, { autoClose: 5000 });
     }
   }, [Router.query.authorized]);
-
+  debugger;
   const updateUserName = (Username) => {
     setUserName(Username);
   };
   const updatePassword = (Password) => {
     setPassword(Password);
   };
-
-  // in this place we should call api and get a jwt and decode here
+  const passwordEnter = (event) => {
+    if (event.key === "Enter") {
+      onLoginClick();
+    }
+  };
+  // var input = document.getElementById("password");
+  // input.addEventListener("keypress", function (event) {
+  //   if (event.key === "Enter") {
+  //     event.preventDefault();
+  //     onLoginClick();
+  //   }
+  // });
   async function onLoginClick() {
     try {
       let pushHome = false;
-      setPageMessage("Authorizing ...");
+      toast.dark("Authorizing ...", { autoClose: 2000 });
       const loginRes = await fetch("/api/login", {
         method: "POST",
         body: JSON.stringify({ username, password }),
@@ -44,11 +55,14 @@ function Login() {
 
       if (decodedToken.valid) {
         if (decodedToken.payload.authorized) {
-          setPageMessage("Authorized !");
           localStorage.setItem("smc_jwtToken", jsonWebToken);
           pushHome = true;
-        } else setPageMessage("Authorization failed !");
-      } else setPageMessage(decodedToken.error);
+        } else {
+          toast.error("Authorization failed !", { autoClose: 5000 });
+        }
+      } else {
+        toast.error(decodedToken.error, { autoClose: 5000 });
+      }
 
       if (pushHome) {
         Router.push(
@@ -60,7 +74,7 @@ function Login() {
         );
       }
     } catch (error) {
-      setPageMessage(error.message);
+      toast.error(error.message, { autoClose: 5000 });
       console.log("login page catch error - " + error.message);
     }
   }
@@ -77,22 +91,29 @@ function Login() {
   return (
     <div>
       <h2>{pageMessage}</h2>
-      <InputField
-        id={"username"}
-        labelText={"User Name:"}
-        callbackValue={updateUserName}
+      <input
+        id="username"
+        placeholder="User Name"
+        onChange={(e) => {
+          updateUserName(e.target.value);
+        }}
       />
-
-      <InputField
-        id={"password"}
-        labelText={"Password:"}
-        callbackValue={updatePassword}
+      <input
+        id="password"
+        placeholder="Password"
+        type="password"
+        onKeyDown={passwordEnter}
+        onChange={(e) => {
+          updatePassword(e.target.value);
+        }}
       />
 
       <div>
         <Button buttonText="Login" onButtonClick={onLoginClick} />
         <Button buttonText="Create User" onButtonClick={onCreateClick} />
       </div>
+
+      <ToastContainer />
     </div>
   );
 }
