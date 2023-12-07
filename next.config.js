@@ -2,10 +2,10 @@
 
 const nextConfig = {
   reactStrictMode: true,
-  output: "export",
+  //output: "export",
   //Add basePath
   //basePath: "/github-pages",
-  basePath: "/social_media_clone",
+  //basePath: "/social_media_clone",
 };
 
 module.exports = nextConfig;

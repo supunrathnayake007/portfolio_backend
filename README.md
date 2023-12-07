@@ -22,4 +22,6 @@ Login Module
 
 -user Login
 --credentials should validate with database and should receive true or false -check
---return jwt from login api
+--return jwt from login api -check
+--in login page save jwt to local storage and push to home -check
+--when home page load check the saved token and if there something wrong with the token push to the login page with a message - check

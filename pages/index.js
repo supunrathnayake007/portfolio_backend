@@ -2,17 +2,62 @@ import { useEffect, useState } from "react";
 import Router from "next/router";
 import Head from "next/head";
 import Image from "next/image";
-import { Inter } from "next/font/google";
+import { Edu_QLD_Beginner, Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const [username, setUserName] = useState("");
+
   useEffect(() => {
-    setUserName(Router.query.username);
+    //setUserName(Router.query.username);
+    //console.log("Home page here ---");
+    validateUser();
   }, []);
-  if (username == null) Router.push("/login");
+  async function validateUser() {
+    try {
+      let pushLogin = false;
+      let messageForLogin = "messageForLogin";
+      debugger;
+      const jsonWebToken = localStorage.getItem("smc_jwtToken");
+      const verifyRes = await fetch("/api/verifyJwt", {
+        method: "POST",
+        body: JSON.stringify({ jsonWebToken }),
+      });
+      const verifyResponseData = await verifyRes.json();
+      const decodedToken = verifyResponseData.decodedToken;
+
+      if (decodedToken.valid) {
+        if (!decodedToken.payload.authorized) {
+          messageForLogin = "- authentication failed - please log in -";
+          pushLogin = true;
+        } else {
+          setUserName(decodedToken.payload.username);
+        }
+      } else {
+        messageForLogin = decodedToken.error;
+        pushLogin = true;
+      }
+
+      if (pushLogin) {
+        Router.push(
+          {
+            pathname: "/login",
+            query: {
+              message: messageForLogin,
+              authorized: false,
+            },
+          },
+          "/login"
+        );
+      }
+    } catch (error) {
+      console.log("home page - validateUser - " + error.message);
+    }
+  }
+
+  //validateUser();
 
   return (
     <>

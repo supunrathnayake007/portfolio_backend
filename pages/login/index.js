@@ -10,8 +10,10 @@ function Login() {
   const [title, setTitle] = useState("");
   const [pageMessage, setPageMessage] = useState("");
   useEffect(() => {
-    setTitle(Router.query.result);
-  }, []);
+    if (Router.query.authorized) {
+      setPageMessage(Router.query.message);
+    }
+  }, [Router.query.authorized]);
 
   const updateUserName = (Username) => {
     setUserName(Username);
@@ -31,21 +33,23 @@ function Login() {
       });
       const loginResponseData = await loginRes.json();
       const jsonWebToken = loginResponseData.token;
+      debugger;
       const verifyRes = await fetch("/api/verifyJwt", {
         method: "POST",
         body: JSON.stringify({ jsonWebToken }),
       });
       const verifyResponseData = await verifyRes.json();
       const decodedToken = verifyResponseData.decodedToken;
-      debugger;
-      //token can save in local storage here
-      /////
+      //debugger;
 
       if (decodedToken.valid) {
-        if (decodedToken.payload.authorized) setPageMessage("Authorized !");
-        else setPageMessage("Authorization failed !");
+        if (decodedToken.payload.authorized) {
+          setPageMessage("Authorized !");
+          localStorage.setItem("smc_jwtToken", jsonWebToken);
+          pushHome = true;
+        } else setPageMessage("Authorization failed !");
       } else setPageMessage(decodedToken.error);
-      //debugger;
+
       if (pushHome) {
         Router.push(
           {
