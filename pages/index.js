@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Router from "next/router";
+//import Router from "next/router";
 import Head from "next/head";
 import Image from "next/image";
 import { Edu_QLD_Beginner, Inter } from "next/font/google";
@@ -19,8 +19,9 @@ export default function Home() {
   //   validateUser();
   // }, []);
   useEffect(() => {
+    const router = require("next/router");
     if (pushLogin.push) {
-      Router.push(
+      router.push(
         {
           pathname: "/login",
           query: {
