@@ -1,20 +1,21 @@
 import { useState, useEffect } from "react";
 import InputField from "../../components/input_components/inputField";
 import Button from "../../components/input_components/button";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function Login() {
+  const router = useRouter();
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [title, setTitle] = useState("");
   const [pageMessage, setPageMessage] = useState("");
   useEffect(() => {
-    if (Router.query.authorized) {
+    if (router.query.authorized) {
       toast.error(Router.query.message, { autoClose: 5000 });
     }
-  }, [Router.query.authorized]);
+  }, [router.query.authorized]);
   debugger;
   const updateUserName = (Username) => {
     setUserName(Username);
@@ -79,7 +80,7 @@ function Login() {
     }
   }
   const onCreateClick = () => {
-    Router.push(
+    router.push(
       {
         pathname: "/login/createUser",
         query: { username: username },
