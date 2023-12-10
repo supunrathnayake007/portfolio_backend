@@ -13,18 +13,20 @@ export default function Home() {
 
   useEffect(() => {
     debugger;
-    const router = require("next/router");
-    if (pushLogin.push) {
-      router.push(
-        {
-          pathname: "/login",
-          query: {
-            message: pushLogin.message,
-            authorized: false,
+    if (typeof window !== "undefined") {
+      const router = require("next/router");
+      if (pushLogin.push) {
+        router.push(
+          {
+            pathname: "/login",
+            query: {
+              message: pushLogin.message,
+              authorized: false,
+            },
           },
-        },
-        "/login"
-      );
+          "/login"
+        );
+      }
     }
   }, [pushLogin]);
   useEffect(() => {
