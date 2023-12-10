@@ -13,7 +13,7 @@ function Login() {
   const [pageMessage, setPageMessage] = useState("");
   useEffect(() => {
     if (router.query.authorized) {
-      toast.error(Router.query.message, { autoClose: 5000 });
+      toast.error(router.query.message, { autoClose: 5000 });
     }
   }, [router.query.authorized]);
   debugger;
