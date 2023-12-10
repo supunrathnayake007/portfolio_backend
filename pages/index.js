@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-//import Router from "next/router";
+import { useRouter } from "next/router";
 import Head from "next/head";
 import Image from "next/image";
 import { Edu_QLD_Beginner, Inter } from "next/font/google";
@@ -11,24 +11,22 @@ export default function Home() {
   const [username, setUserName] = useState("");
   const [pushLogin, setPushLogin] = useState({});
 
+  const router = useRouter(); // Use useRouter hook here
+
   useEffect(() => {
-    debugger;
-    if (typeof window !== "undefined") {
-      const router = require("next/router");
-      if (pushLogin.push) {
-        router.push(
-          {
-            pathname: "/login",
-            query: {
-              message: pushLogin.message,
-              authorized: false,
-            },
+    if (pushLogin.push && router) {
+      router.push(
+        {
+          pathname: "/login",
+          query: {
+            message: pushLogin.message,
+            authorized: false,
           },
-          "/login"
-        );
-      }
+        },
+        "/login"
+      );
     }
-  }, [pushLogin]);
+  }, [pushLogin, router]);
   useEffect(() => {
     //setUserName(Router.query.username);
     //console.log("Home page here ---");
