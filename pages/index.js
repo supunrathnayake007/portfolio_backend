@@ -9,16 +9,31 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const [username, setUserName] = useState("");
+  const [pushLogin, setPushLogin] = useState({});
+  let message = "message from Home";
 
+  validateUser();
+  // useEffect(() => {
+  //   //setUserName(Router.query.username);
+  //   //console.log("Home page here ---");
+  //   validateUser();
+  // }, []);
   useEffect(() => {
-    //setUserName(Router.query.username);
-    //console.log("Home page here ---");
-    validateUser();
-  }, []);
+    if (pushLogin.push) {
+      Router.push(
+        {
+          pathname: "/login",
+          query: {
+            message: pushLogin.message,
+            authorized: false,
+          },
+        },
+        "/login"
+      );
+    }
+  }, [pushLogin]);
   async function validateUser() {
     try {
-      let pushLogin = false;
-      let messageForLogin = "messageForLogin";
       debugger;
       const jsonWebToken = localStorage.getItem("smc_jwtToken");
       const verifyRes = await fetch("/api/verifyJwt", {
@@ -30,27 +45,18 @@ export default function Home() {
 
       if (decodedToken.valid) {
         if (!decodedToken.payload.authorized) {
-          messageForLogin = "- authentication failed - please log in -";
-          pushLogin = true;
+          setPushLogin({
+            push: true,
+            message: "- authentication failed - please log in -",
+          });
         } else {
           setUserName(decodedToken.payload.username);
         }
       } else {
-        messageForLogin = decodedToken.error;
-        pushLogin = true;
-      }
-
-      if (pushLogin) {
-        Router.push(
-          {
-            pathname: "/login",
-            query: {
-              message: messageForLogin,
-              authorized: false,
-            },
-          },
-          "/login"
-        );
+        setPushLogin({
+          push: true,
+          message: decodedToken.error,
+        });
       }
     } catch (error) {
       console.log("home page - validateUser - " + error.message);
