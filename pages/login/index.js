@@ -65,13 +65,13 @@ function Login() {
       }
 
       if (pushHome) {
-        Router.push(
-          {
-            pathname: "/",
-            query: { username: username },
-          },
-          "/"
-        );
+        // Router.push(
+        //   {
+        //     pathname: "/",
+        //     query: { username: username },
+        //   },
+        //   "/"
+        // );
       }
     } catch (error) {
       toast.error(error.message, { autoClose: 5000 });

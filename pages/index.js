@@ -10,15 +10,9 @@ const inter = Inter({ subsets: ["latin"] });
 export default function Home() {
   const [username, setUserName] = useState("");
   const [pushLogin, setPushLogin] = useState({});
-  let message = "message from Home";
 
-  validateUser();
-  // useEffect(() => {
-  //   //setUserName(Router.query.username);
-  //   //console.log("Home page here ---");
-  //   validateUser();
-  // }, []);
   useEffect(() => {
+    debugger;
     const router = require("next/router");
     if (pushLogin.push) {
       router.push(
@@ -33,9 +27,15 @@ export default function Home() {
       );
     }
   }, [pushLogin]);
+  useEffect(() => {
+    //setUserName(Router.query.username);
+    //console.log("Home page here ---");
+    validateUser();
+  }, []);
+
   async function validateUser() {
     try {
-      debugger;
+      //debugger;
       const jsonWebToken = localStorage.getItem("smc_jwtToken");
       const verifyRes = await fetch("/api/verifyJwt", {
         method: "POST",
@@ -101,7 +101,6 @@ export default function Home() {
             </a>
           </div>
         </div>
-
         <div className={styles.center}>
           <Image
             className={styles.logo}
