@@ -1,15 +1,29 @@
-This next project have file base routing
+next commit message build
 
-Todo List
+- installed tailwind , logout button added , simple styling for login page
+- creating new functionality for portfolio site
+  -- create tech page ,api and mongodb functions. need more improvements(only insert)
 
 ---
 
-user logging should have , google login ,and microsoft logging should be looks professional - login html Done
+---
+
+This next project have file base routing
+
+---
+
+---
+
+Todo List
 
 Home page can have featured posts or pined top - make simple as possible in first round
 also all post visible - we might will learn something from here
 post can have likes/dislike and it's count or a graph
 there should be user profile
+
+---
+
+---
 
 My Tasks list Tracking
 Login Module -DONE

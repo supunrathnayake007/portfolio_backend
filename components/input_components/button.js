@@ -6,7 +6,11 @@ function Button(props) {
 
   return (
     <div>
-      <button type="button" onClick={onButtonClick}>
+      <button
+        className="m-1 bg-lime-500 px-2 py-1 rounded hover:bg-lime-600"
+        type="button"
+        onClick={onButtonClick}
+      >
         {buttonText}
       </button>
     </div>

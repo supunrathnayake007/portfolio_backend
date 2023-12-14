@@ -1,9 +1,16 @@
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import InputField from "../../components/input_components/inputField";
 import Button from "../../components/input_components/button";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+// tailwind classNames
+const commonButton =
+  "m-1 px-2 py-1 bg-lime-500 rounded hover:bg-lime-600  text-white ";
+const commonInput = "m-1 w-full px-3 py-2 border rounded-md ";
+///
 
 function Login() {
   const router = useRouter();
@@ -41,7 +48,7 @@ function Login() {
       toast.dark("Authorizing ...", { autoClose: 2000 });
       const loginRes = await fetch("/api/login", {
         method: "POST",
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, password, expiresIn: "1m" }),
       });
       const loginResponseData = await loginRes.json();
       const jsonWebToken = loginResponseData.token;
@@ -90,30 +97,46 @@ function Login() {
   };
 
   return (
-    <div>
-      <h2>{pageMessage}</h2>
-      <input
-        id="username"
-        placeholder="User Name"
-        onChange={(e) => {
-          updateUserName(e.target.value);
-        }}
-      />
-      <input
-        id="password"
-        placeholder="Password"
-        type="password"
-        onKeyDown={passwordEnter}
-        onChange={(e) => {
-          updatePassword(e.target.value);
-        }}
-      />
-
-      <div>
-        <Button buttonText="Login" onButtonClick={onLoginClick} />
-        <Button buttonText="Create User" onButtonClick={onCreateClick} />
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="-mt-60">
+        <div className="flex justify-center m-10 ">
+          <Image
+            className="rounded-xl"
+            src="/supunLogo.jpeg"
+            alt="Supun Logo"
+            width={300} // Set the width of the image
+            height={300} // Set the height of the image
+          />
+        </div>
+        <div className="block">
+          <input
+            id="username"
+            className={"mb-2 placeholder:italic" + commonInput}
+            placeholder="User Name"
+            onChange={(e) => {
+              updateUserName(e.target.value);
+            }}
+          />
+          <input
+            id="password"
+            className={"mb-2 placeholder:italic" + commonInput}
+            placeholder="Password"
+            type="password"
+            onKeyDown={passwordEnter}
+            onChange={(e) => {
+              updatePassword(e.target.value);
+            }}
+          />
+        </div>
+        <div className="flex justify-center">
+          <button className={commonButton + "w-24"} onClick={onLoginClick}>
+            Login
+          </button>
+          <button className={commonButton + ""} onClick={onCreateClick}>
+            Create User
+          </button>
+        </div>
       </div>
-
       <ToastContainer />
     </div>
   );

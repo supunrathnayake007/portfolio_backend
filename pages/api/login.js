@@ -11,7 +11,7 @@ export default async function (req, res) {
   }
   console.log("inside api/login ");
   const body = JSON.parse(req.body);
-  const { username, password } = body;
+  const { username, password, expiresIn } = body;
 
   try {
     const result = await findUser(username);
@@ -24,7 +24,7 @@ export default async function (req, res) {
       authorized,
       userGroupId,
     };
-    res.json(jwtSign(tokeData, "1m"));
+    res.json(jwtSign(tokeData, expiresIn));
   } catch (error) {
     console.log("api/login catch error " + error.message);
   }
