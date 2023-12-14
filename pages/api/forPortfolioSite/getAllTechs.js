@@ -1,4 +1,4 @@
-import { getAllTechs } from "../../lib/mongodb.js";
+import { getAllTechs } from "../../../lib/mongodb";
 
 export default function () {
   try {
