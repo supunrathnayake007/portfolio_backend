@@ -86,11 +86,11 @@ export default function Home() {
         {/* update favicon */}
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
+      <main className="min-h-screen bg-slate-800">
         <div>
           <p className="text-3xl font-bold underline">username: {username}</p>
           <button
-            className="m-1 bg-lime-500 px-2 py-1 rounded hover:bg-lime-600"
+            className="m-1 bg-lime-500 px-2 py-1 rounded hover:bg-lime-600 text-white"
             onClick={logoutOnClick}
           >
             Logout

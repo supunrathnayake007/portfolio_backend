@@ -97,7 +97,7 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-screen bg-slate-900 flex items-center justify-center">
       <div className="-mt-60">
         <div className="flex justify-center m-10 ">
           <Image

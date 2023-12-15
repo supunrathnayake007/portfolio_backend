@@ -1,9 +1,5 @@
 next commit message build
 
-- installed tailwind , logout button added , simple styling for login page
-- creating new functionality for portfolio site
-  -- create tech page ,api and mongodb functions. need more improvements(only insert)
-
 ---
 
 ---
