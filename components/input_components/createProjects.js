@@ -18,6 +18,9 @@ function CreateProjects() {
   useEffect(() => {
     //console.log("selectedTechs: " + selectedTechs);
   }, [selectedTechs]);
+  useEffect(() => {
+    loadAllTechs();
+  }, []);
   const updateTitle = (title) => {
     setTitle(title);
   };
@@ -91,7 +94,7 @@ function CreateProjects() {
     //debugger;
     setAllTechs(responseData.result);
   }
-  loadAllTechs();
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setSelectedImage(file);
