@@ -12,8 +12,8 @@ function CreateTechs() {
   const [message, setMessage] = useState("Welcome");
   const [allTechs, setAllTechs] = useState([]);
   const [imgSrc, setImgSrc] = useState([]);
-  const updateTitle = (Password) => {
-    setTitle(Password);
+  const updateTitle = (title) => {
+    setTitle(title);
   };
 
   useEffect(() => {
