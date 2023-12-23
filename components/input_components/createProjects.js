@@ -7,7 +7,7 @@ const commonButton =
 const commonInput = "m-1 w-full px-3 py-2 border rounded-md ";
 ///
 
-function CreateProjects() {
+function CreateProjects(props) {
   const [pageMsg, setPageMsg] = useState("<page message>!");
   const [selectedImage, setSelectedImage] = useState(null);
   const [allTechs, setAllTechs] = useState([]);
@@ -74,6 +74,7 @@ function CreateProjects() {
       }
       const responseData = await res.json();
       setPageMsg("successful ...");
+      props.reloadProjects();
       debugger;
       console.log(responseData);
     } catch (err) {
