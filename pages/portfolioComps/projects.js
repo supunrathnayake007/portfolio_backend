@@ -1,7 +1,5 @@
 import ProjectCard from "../../components/portfolioComp/projectCard";
 import { useState, useEffect } from "react";
-import Link from "next/link";
-import { useRouter } from "next/router";
 import CreateProjects from "../../components/input_components/createProjects";
 function Projects() {
   const [data, setData] = useState([]);
@@ -21,15 +19,6 @@ function Projects() {
     debugger;
     setData(responseData.result);
   }
-  let data1 = [
-    {
-      title: "title",
-      image: "image",
-      disc: "description",
-      tech: "techs",
-    },
-    { title: "title2", image: "image2", disc: "description2", tech: "techs2" },
-  ];
   const checkAuth = () => {
     /* user authentication should implement here */
     return true;

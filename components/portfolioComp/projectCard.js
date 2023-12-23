@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 const ProjectCard = (props) => {
-  const [showFullDesc, setShowFullDesc] = useState(false);
   const openNewPage = () => {
     // props.openNewPage(props.project);
   };
