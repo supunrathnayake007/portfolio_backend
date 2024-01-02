@@ -6,7 +6,12 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        xxs: "480px", // min-width
+        xxxs: "300px",
+      },
+    },
   },
   plugins: [],
 };
