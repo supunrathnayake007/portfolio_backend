@@ -48,7 +48,7 @@ function Login() {
       toast.dark("Authorizing ...", { autoClose: 2000 });
       const loginRes = await fetch("/api/login", {
         method: "POST",
-        body: JSON.stringify({ username, password, expiresIn: "1m" }),
+        body: JSON.stringify({ username, password, expiresIn: "1h" }),
       });
       const loginResponseData = await loginRes.json();
       const jsonWebToken = loginResponseData.token;
@@ -59,7 +59,7 @@ function Login() {
       });
       const verifyResponseData = await verifyRes.json();
       const decodedToken = verifyResponseData.decodedToken;
-      //debugger;
+      debugger;
 
       if (decodedToken.valid) {
         if (decodedToken.payload.authorized) {

@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function index() {
-  const inputClassName = " bg-slate-900 border-slate-500 rounded w-6";
+  const inputClassName = " bg-slate-900 border-slate-300 rounded w-6";
 
   return (
     <div className="min-h-screen bg-slate-900 text-white flex items-center justify-center">

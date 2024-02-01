@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import Image from "next/image";
 import { Edu_QLD_Beginner, Inter } from "next/font/google";
+import CreatePost from "../components/posts/createPost";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,20 +13,7 @@ export default function Home() {
 
   const router = useRouter(); // Use useRouter hook here
 
-  useEffect(() => {
-    if (pushLogin.push && router) {
-      router.push(
-        {
-          pathname: "/login",
-          query: {
-            message: pushLogin.message,
-            authorized: false,
-          },
-        },
-        "/login"
-      );
-    }
-  }, [pushLogin, router]);
+  useEffect(() => {}, [pushLogin, router]);
   useEffect(() => {
     //setUserName(Router.query.username);
     //console.log("Home page here ---");
@@ -34,7 +22,7 @@ export default function Home() {
 
   async function validateUser() {
     try {
-      //debugger;
+      debugger;
       const jsonWebToken = localStorage.getItem("smc_jwtToken");
       if (jsonWebToken) {
         const verifyRes = await fetch("/api/verifyJwt", {
@@ -52,6 +40,10 @@ export default function Home() {
             });
           } else {
             setUserName(decodedToken.payload.username);
+            setPushLogin({
+              push: false,
+              message: "Already logged in .. ",
+            });
           }
         } else {
           setPushLogin({
@@ -71,11 +63,31 @@ export default function Home() {
   }
 
   const logoutOnClick = () => {
-    localStorage.removeItem("smc_jwtToken");
-    setPushLogin({
-      push: true,
-      message: "logout Successful..!",
-    });
+    debugger;
+    if (!pushLogin.push) {
+      localStorage.removeItem("smc_jwtToken");
+      setPushLogin({
+        push: true,
+        message: "logout Successful..!",
+      });
+    } else {
+      if (pushLogin.push && router) {
+        setPushLogin({
+          push: false,
+          message: "just logged in ..",
+        });
+        router.push(
+          {
+            pathname: "/login",
+            query: {
+              message: pushLogin.message,
+              authorized: false,
+            },
+          },
+          "/login"
+        );
+      }
+    }
   };
   return (
     <>
@@ -86,15 +98,26 @@ export default function Home() {
         {/* update favicon */}
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="min-h-screen bg-slate-800">
+      <main className="min-h-screen bg-slate-400">
         <div>
           <p className="text-3xl font-bold underline">username: {username}</p>
           <button
             className="m-1 bg-lime-500 px-2 py-1 rounded hover:bg-lime-600 text-white"
             onClick={logoutOnClick}
           >
-            Logout
+            {pushLogin.push ? "Login" : "Logout"}
           </button>
+        </div>
+        <div>
+          {pushLogin.push ? (
+            ""
+          ) : (
+            <div className="flex justify-center">
+              <div className="m-4 lg:w-2/3 xxxs:w-full">
+                <CreatePost />
+              </div>
+            </div>
+          )}
         </div>
       </main>
     </>
