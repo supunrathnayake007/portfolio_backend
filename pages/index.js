@@ -61,6 +61,9 @@ export default function Home() {
       console.log("home page - validateUser - " + error.message);
     }
   }
+  const userGroupsOnClick = () => {
+    window.location.href = "/userGroups/createUserGroups";
+  };
 
   const logoutOnClick = () => {
     debugger;
@@ -99,22 +102,36 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="min-h-screen bg-slate-400">
-        <div>
-          <p className="text-3xl font-bold underline">username: {username}</p>
+        <div className="flex">
+          <p className="text-1xl font-bold underline">username: {username}</p>
           <button
             className="m-1 bg-lime-500 px-2 py-1 rounded hover:bg-lime-600 text-white"
             onClick={logoutOnClick}
           >
             {pushLogin.push ? "Login" : "Logout"}
           </button>
+          {!pushLogin.push ? (
+            <div className="flex w-full">
+              <button
+                className="m-1 bg-lime-500 px-2 py-1 rounded hover:bg-lime-600 text-white"
+                onClick={userGroupsOnClick}
+              >
+                (test)User Groups
+              </button>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
         <div>
           {pushLogin.push ? (
             ""
           ) : (
-            <div className="flex justify-center">
-              <div className="m-4 lg:w-2/3 xxxs:w-full">
-                <CreatePost />
+            <div>
+              <div className="flex justify-center">
+                <div className="m-4 lg:w-2/3 xxxs:w-full">
+                  <CreatePost />
+                </div>
               </div>
             </div>
           )}
