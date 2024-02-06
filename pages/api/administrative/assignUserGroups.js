@@ -12,10 +12,7 @@ export default async function (req, res) {
   }
   console.log("api triggered|AssignUserGroups.js");
   try {
-    //we need update users table with new column users table with userGroups id
-    //there is no new create, delete  just update only
-    //but we can users data here
-    //action value will be update,getData
+    //if action value is getData then send dataPerPage,pageNumber values
     const { action } = body;
     let result = {};
     if (action === "update") {
