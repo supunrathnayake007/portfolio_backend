@@ -21,7 +21,7 @@ export default async function (req, res) {
     res.end("Error");
     return;
   }
-  console.log("api triggered");
+  console.log("api triggered|userGroups.js");
   try {
     const { action } = body;
 
