@@ -160,9 +160,13 @@ export default function CreateUserGroups() {
   const [manageUG, setManageUG] = useState(false);
   const [createPosts, setCreatePosts] = useState(false);
   const [createProjects, setCreateProjects] = useState(false);
+  const [assignUG, setAssignUG] = useState(false);
 
   const handleChangeManageUG = () => {
     setManageUG(!manageUG);
+  };
+  const handleChangeAssignUG = () => {
+    setAssignUG(!assignUG);
   };
   const handleChangeCreatePosts = () => {
     setCreatePosts(!createPosts);
@@ -197,6 +201,7 @@ export default function CreateUserGroups() {
       if (manageUG) functions.push("manageUG");
       if (createPosts) functions.push("createPosts");
       if (createProjects) functions.push("createProjects");
+      if (assignUG) functions.push("assignUG");
       if (userGroupId !== "") {
         action = "update";
         userGroupData = {
@@ -332,6 +337,18 @@ export default function CreateUserGroups() {
                 value="manageUG"
               />
               <label for="manageUG"> Manage User Groups</label>
+            </div>
+            <div className="w-full flex ">
+              <input
+                className="mr-4"
+                type="checkbox"
+                checked={assignUG}
+                onChange={handleChangeAssignUG}
+                id="assignUG"
+                name="assignUG"
+                value="assignUG"
+              />
+              <label for="assignUG"> Assign User Groups</label>
             </div>
             <div className="w-full flex ">
               <input

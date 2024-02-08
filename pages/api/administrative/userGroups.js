@@ -4,6 +4,7 @@ import {
   getDataCount,
   removeRecodeById,
   UpdateRecodeById,
+  getAllByCollection,
 } from "../../../lib/mongodb";
 
 export default async function (req, res) {
@@ -45,6 +46,9 @@ export default async function (req, res) {
     if (action === "getData") {
       const { dataPerPage, pageNumber } = body;
       result = await getDataPageVice("UserGroups", dataPerPage, pageNumber);
+    }
+    if (action === "getAllData") {
+      result = await getAllByCollection("UserGroups");
     }
     const recodeCount = await getDataCount("UserGroups");
     return res.status(200).json({ result: result, recodeCount: recodeCount });
