@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useGlobalContext } from "../../context/GlobalContext";
 import Image from "next/image";
 import InputField from "../../components/input_components/inputField";
 import Button from "../../components/input_components/button";
@@ -14,6 +15,7 @@ const commonInput = "m-1 w-full px-3 py-2 border rounded-md ";
 
 function Login() {
   const router = useRouter();
+  const { globalVariable, setGlobalVariable } = useGlobalContext();
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [title, setTitle] = useState("");
@@ -64,6 +66,8 @@ function Login() {
       if (decodedToken.valid) {
         if (decodedToken.payload.authorized) {
           localStorage.setItem("smc_jwtToken", jsonWebToken);
+          localStorage.setItem("smc_username", username);
+          setGlobalVariable({ ...globalVariable, username: username });
           pushHome = true;
         } else {
           toast.error("Authorization failed !", { autoClose: 5000 });

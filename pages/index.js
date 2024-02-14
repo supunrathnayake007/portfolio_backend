@@ -69,6 +69,7 @@ export default function Home() {
     debugger;
     if (!pushLogin.push) {
       localStorage.removeItem("smc_jwtToken");
+      localStorage.removeItem("smc_username");
       setPushLogin({
         push: true,
         message: "logout Successful..!",
