@@ -28,7 +28,7 @@ export default function WallpaperThumbGrid() {
 
   async function loadWallpapers(pageNumber) {
     try {
-      const dataPerPage = 20;
+      const dataPerPage = 5;
       setIsLoading(true);
       const res = await fetch("/api/wallpaperApp/loadWallpapers", {
         method: "POST",
