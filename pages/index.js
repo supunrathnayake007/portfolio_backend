@@ -65,6 +65,10 @@ export default function Home() {
     window.location.href = "/userGroups/createUserGroups";
   };
 
+  const wallpapersOnClick = () => {
+    window.location.href = "/projects/wallpaperApp";
+  };
+
   const logoutOnClick = () => {
     debugger;
     if (!pushLogin.push) {
@@ -118,6 +122,12 @@ export default function Home() {
                 onClick={userGroupsOnClick}
               >
                 (test)User Groups
+              </button>
+              <button
+                className="m-1 bg-lime-500 px-2 py-1 rounded hover:bg-lime-600 text-white"
+                onClick={wallpapersOnClick}
+              >
+                (test)wallpapers
               </button>
             </div>
           ) : (

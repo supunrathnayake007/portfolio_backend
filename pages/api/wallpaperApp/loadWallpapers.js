@@ -1,5 +1,9 @@
 import { getWallpapers } from "../../../lib/mongodb";
 export default async function (req, res) {
+  // Set CORS headers to allow requests from all origins
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   try {
     const body = JSON.parse(req.body);
     const { viewedIds, pageNumber, dataPerPage } = body;
