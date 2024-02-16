@@ -1,15 +1,10 @@
+import { saveAs } from "file-saver";
+import axios from "axios";
+import useErrorLogger from "../../hooks/useErrorLogger";
 import React, { useEffect, useState, useRef } from "react";
 
-export default function WallpaperThumbGrid() {
-  const [wallpapers, setWallpapers] = useState([]);
-  const [currentImageIndex, setCurrentImageIndex] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+function useInfiniteScroll(callback) {
   const loaderRef = useRef(null);
-
-  useEffect(() => {
-    loadWallpapers(1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(handleObserver, {
@@ -25,40 +20,51 @@ export default function WallpaperThumbGrid() {
     };
   }, []);
 
-  async function loadWallpapers(pageNumber) {
-    try {
-      const dataPerPage = 20;
-      const res = await fetch("/api/wallpaperApp/loadWallpapers", {
-        method: "POST",
-        body: JSON.stringify({ viewedIds: [], dataPerPage, pageNumber }),
-      });
-      const responseData = await res.json();
-      setWallpapers((prevWallpapers) => [...prevWallpapers, ...responseData]);
-    } catch (error) {
-      console.log("wallpaperThumbGrid|error:" + error.message);
-    }
-  }
-
   function handleObserver(entries) {
     const target = entries[0];
     if (target.isIntersecting && !isLoading) {
-      loadWallpapers(wallpapers.length / 20 + 1);
+      requestAnimationFrame(() => {
+        setIsLoading(true);
+        callback();
+      });
     }
   }
 
-  const openFullScreen = (index) => {
-    setCurrentImageIndex(index);
-  };
+  return [loaderRef];
+}
 
-  const closeFullScreen = () => {
-    setCurrentImageIndex(null);
-  };
+export default function WallpaperThumbGrid() {
+  const [wallpapers, setWallpapers] = useState([]);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(null);
+  const [loaderRef] = useInfiniteScroll(() => {
+    loadWallpapers(pageNumber);
+  });
+  const errorLogger = useErrorLogger();
+
+  async function loadWallpapers(pageNumber) {
+    try {
+      const dataPerPage = 5;
+      setIsLoading(true);
+      const res = await axios.post("/api/wallpaperApp/loadWallpapers", {
+        viewedIds: [],
+        dataPerPage,
+        pageNumber,
+      });
+      const responseData = res.data;
+      setWallpapers((prevWallpapers) => [...prevWallpapers, ...responseData]);
+      setIsLoading(false);
+      setPageNumber(pageNumber + 1);
+    } catch (error) {
+      errorLogger.logError(error);
+      setIsLoading(false);
+    }
+  }
 
   const downloadImage = (imageData) => {
-    const link = document.createElement("a");
-    link.href = "data:image/png;base64," + imageData;
-    link.download = "wallpaper.png";
-    link.click();
+    const blob = new Blob([imageData], { type: "image/png" });
+    saveAs(blob, "wallpaper.png");
   };
 
   const handleNext = () => {
@@ -73,23 +79,32 @@ export default function WallpaperThumbGrid() {
     );
   };
 
+  const openFullScreen = (index) => {
+    setCurrentImageIndex(index);
+  };
+
+  const closeFullScreen = () => {
+    setCurrentImageIndex(null);
+  };
+
   return (
     <div>
       <div className="m-1 p-1 w-full flex flex-wrap justify-center">
         {wallpapers.map((wallpaper, index) => (
           <div key={index} className="relative">
             <img
-              className="m-0.5 h-80 cursor-pointer"
+              className="m-0.5 h-80"
               src={"data:image/png;base64," + wallpaper.file_data}
               alt={wallpaper.file_name}
               onClick={() => openFullScreen(index)}
+              onError={(e) => {
+                e.target.src = "/error_cloud_icon.svg"; // Replace with a fallback image URL
+              }}
             />
           </div>
         ))}
         {isLoading && <div ref={loaderRef}>Loading...</div>}
       </div>
-
-      {/* Full screen image view */}
       {currentImageIndex !== null && (
         <div className="fixed top-0 left-0 w-full h-full bg-black flex justify-center items-center">
           <img

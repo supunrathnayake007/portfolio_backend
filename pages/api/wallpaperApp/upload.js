@@ -1,5 +1,6 @@
 import { commonInsertMany } from "../../../lib/mongodb";
 import multer from "multer";
+import sharp from "sharp";
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
@@ -27,16 +28,29 @@ export default function (req, res) {
         const fileFieldsCount = parseInt(req.body.fileFieldsCount);
         const userName = req.body.userName;
 
-        const wallpapersData = req.files.map((file, index) => {
-          return {
-            file_name: Array.isArray(req.body.fileName)
-              ? req.body.fileName[index]
-              : req.body.fileName, // Get file name for each file
-            file_data: file.buffer,
-            created_date: new Date(),
-            created_userName: userName || "YourUserName",
-          };
-        });
+        const generateThumbnail = async (fileBuffer) => {
+          // Resize the image to generate thumbnail (you can adjust the width and height as needed)
+          const thumbnailBuffer = await sharp(fileBuffer)
+            .extract({ left: 100, top: 300, width: 350, height: 350 })
+            .toBuffer();
+          return thumbnailBuffer;
+        };
+
+        const wallpapersData = await Promise.all(
+          req.files.map(async (file, index) => {
+            const thumbnailBuffer = await generateThumbnail(file.buffer);
+            return {
+              file_name: Array.isArray(req.body.fileName)
+                ? req.body.fileName[index]
+                : req.body.fileName, // Get file name for each file
+              file_data: file.buffer,
+              thumbnail: thumbnailBuffer,
+              downloads: 0,
+              created_date: new Date(),
+              created_userName: userName || "YourUserName",
+            };
+          })
+        );
 
         const result = await commonInsertMany(wallpapersData, "wallpapers");
         if (result.error) {

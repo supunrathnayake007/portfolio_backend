@@ -1,57 +1,128 @@
 import React, { useEffect, useState, useRef } from "react";
+import axios from "axios";
+import HashLoaderC from "../loaders/HashLoaderC";
 
 export default function WallpaperThumbGrid() {
   const [wallpapers, setWallpapers] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [currentImageIndex, setCurrentImageIndex] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [wpLoading, setWpLoading] = useState(false);
+  const [downLoading, setDownLoading] = useState(false);
+  const [noMoreWallpapers, setNoMoreWallpapers] = useState(false);
   const loaderRef = useRef(null);
 
   useEffect(() => {
-    loadWallpapers(pageNumber);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageNumber]);
+    //debugger;
+    //loadWallpapers(pageNumber).then(setIsLoading(false));
+  }, []);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(handleObserver, {
-      threshold: 1,
-    });
+    const observer = new IntersectionObserver(
+      async (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting && !isLoading && !noMoreWallpapers) {
+            setIsLoading(true);
+            await loadWallpaperThumbs(pageNumber);
+            setIsLoading(false);
+          }
+        }
+      },
+      {
+        root: null, // Use the viewport as the root
+        threshold: 0, // Trigger the observer as soon as any part of the target is visible
+      }
+    );
+
     if (loaderRef.current) {
       observer.observe(loaderRef.current);
     }
+
     return () => {
       if (loaderRef.current) {
         observer.unobserve(loaderRef.current);
       }
     };
-  }, []);
+  }, [pageNumber, isLoading, noMoreWallpapers]);
 
-  async function loadWallpapers(pageNumber) {
+  useEffect(() => {
+    console.log("loaderRef.current:" + loaderRef.current);
+  }, [loaderRef.current]);
+
+  async function loadWallpaperThumbs(pageNumber) {
     try {
       const dataPerPage = 5;
-      setIsLoading(true);
-      const res = await fetch("/api/wallpaperApp/loadWallpapers", {
-        method: "POST",
-        body: JSON.stringify({ viewedIds: [], dataPerPage, pageNumber }),
+
+      //debugger;
+      const res = await axios.post("/api/wallpaperApp/loadWallpapers", {
+        action: "loadThumbs",
+        viewedIds: [],
+        dataPerPage,
+        pageNumber,
       });
-      const responseData = await res.json();
-      setWallpapers((prevWallpapers) => [...prevWallpapers, ...responseData]);
-      setIsLoading(false);
-      setPageNumber(pageNumber + 1);
+      const responseData = res.data;
+      if (!responseData.moreWallpapersAvailable) {
+        setNoMoreWallpapers(true);
+      } else {
+        setWallpapers((prevWallpapers) => [
+          ...prevWallpapers,
+          ...responseData.wallpapers,
+        ]);
+        setPageNumber(pageNumber + 1);
+      }
     } catch (error) {
       console.log("wallpaperThumbGrid|error:" + error.message);
-      setIsLoading(false);
+    }
+  }
+  async function loadTheWallpaper(index) {
+    try {
+      debugger;
+      if (!wallpapers[index].downloaded) {
+        setWpLoading(true);
+        const res = await axios.post("/api/wallpaperApp/loadWallpapers", {
+          action: "loadTheWallpaper",
+          id: wallpapers[index]._id,
+        });
+        const updatedWallpapers = [...wallpapers];
+        updatedWallpapers[index] = {
+          ...updatedWallpapers[index],
+          file_data: res.data.file_data,
+          downloaded: true,
+        };
+        setWallpapers(updatedWallpapers);
+        setWpLoading(false);
+      }
+    } catch (error) {
+      setWpLoading(false);
+      console.log("wallpaperThumbGrid|loadTheWallpaper|error:" + error.message);
+    }
+  }
+  async function updateDownloadCount() {
+    try {
+      setDownLoading(true);
+      const res = await axios.post("/api/wallpaperApp/loadWallpapers", {
+        action: "updateDownloadCount",
+        id: wallpapers[currentImageIndex]._id,
+        data: { downloads: wallpapers[currentImageIndex].downloads + 1 },
+      });
+      debugger;
+      const responseData = res.data;
+      const { acknowledged, matchedCount, modifiedCount } = res.data;
+      if (acknowledged && matchedCount === 1 && modifiedCount === 1) {
+        //updated success
+      }
+
+      setDownLoading(false);
+    } catch (error) {
+      setDownLoading(false);
+      console.log(
+        "wallpaperThumbGrid|updateDownloadCount|error:" + error.message
+      );
     }
   }
 
-  function handleObserver(entries) {
-    const target = entries[0];
-    if (target.isIntersecting && !isLoading) {
-      loadWallpapers(pageNumber);
-    }
-  }
-
-  const openFullScreen = (index) => {
+  const openFullScreen = async (index) => {
+    await loadTheWallpaper(index);
     setCurrentImageIndex(index);
   };
 
@@ -59,20 +130,37 @@ export default function WallpaperThumbGrid() {
     setCurrentImageIndex(null);
   };
 
-  const downloadImage = (imageData) => {
+  const downloadImage = async (imageData) => {
+    updateDownloadCount();
     const link = document.createElement("a");
     link.href = "data:image/png;base64," + imageData;
     link.download = "wallpaper.png";
     link.click();
   };
 
-  const handleNext = () => {
-    setCurrentImageIndex((prevIndex) =>
-      prevIndex !== null ? prevIndex + 1 : null
-    );
+  const handleNext = async () => {
+    debugger;
+    if (
+      currentImageIndex !== null &&
+      currentImageIndex + 1 < wallpapers.length
+    ) {
+      setCurrentImageIndex(currentImageIndex + 1);
+      await loadTheWallpaper(currentImageIndex + 1);
+    } else {
+      if (noMoreWallpapers) {
+        setCurrentImageIndex(null);
+      } else {
+        setIsLoading(true);
+        await loadWallpaperThumbs(pageNumber);
+        setIsLoading(false);
+        setCurrentImageIndex(currentImageIndex + 1);
+        await loadTheWallpaper(currentImageIndex + 1);
+      }
+    }
   };
 
-  const handlePrevious = () => {
+  const handlePrevious = async () => {
+    await loadTheWallpaper(currentImageIndex - 1);
     setCurrentImageIndex((prevIndex) =>
       prevIndex !== null && prevIndex > 0 ? prevIndex - 1 : null
     );
@@ -83,8 +171,8 @@ export default function WallpaperThumbGrid() {
         {wallpapers.map((wallpaper, index) => (
           <div key={index} className="relative">
             <img
-              className="m-0.5 h-80"
-              src={"data:image/png;base64," + wallpaper.file_data}
+              className="m-0.5 h-40"
+              src={"data:image/png;base64," + wallpaper.thumbnail}
               alt={wallpaper.file_name}
               onClick={() => openFullScreen(index)}
               onError={(e) => {
@@ -93,27 +181,42 @@ export default function WallpaperThumbGrid() {
             />
           </div>
         ))}
-        {isLoading && <div ref={loaderRef}>Loading...</div>}
+        <div ref={loaderRef}>{isLoading && <div>Loading...</div>}</div>
       </div>
       {/* Full screen image view */}
       {currentImageIndex !== null && (
         <div className="fixed top-0 left-0 w-full h-full bg-black flex justify-center items-center">
+          {wpLoading && (
+            <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center">
+              <div className="relative">
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                  <div className="h-full w-full lg:w-1/2 sm:w-1/2">
+                    <HashLoaderC />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
           <img
-            className="max-h-full max-w-full"
+            className={
+              "max-h-full max-w-full " + `${wpLoading ? "opacity-10" : ""}`
+            }
             src={
               "data:image/png;base64," + wallpapers[currentImageIndex].file_data
             }
             alt="Full Screen Wallpaper"
           />
-          <div className="absolute top-0 left-0 m-4">
+          <div className="absolute top-0 right-0 mx-3 my-2">
             <button
-              className="bg-gray-800 text-white px-4 py-2 rounded-md"
+              className="outline outline-offset-2 outline-green-500 bg-red-600 text-white px-2   rounded-md"
               onClick={closeFullScreen}
             >
-              Close
+              X
             </button>
+          </div>
+          <div className="absolute bottom-0 justify-center my-2">
             <button
-              className="bg-gray-800 text-white px-4 py-2 rounded-md"
+              className="outline outline-offset-2 outline-pink-500 bg-lime-500 hover:bg-lime-600 bg-opacity-50 text-white px-2 py-1 rounded-md"
               onClick={() =>
                 downloadImage(wallpapers[currentImageIndex].file_data)
               }
@@ -122,16 +225,16 @@ export default function WallpaperThumbGrid() {
             </button>
           </div>
           <button
-            className="bg-gray-800 text-white px-4 py-2 rounded-md absolute right-0 top-1/2 transform -translate-y-1/2"
+            className="outline  outline-lime-500 bg-green-800 hover:bg-lime-600 bg-opacity-0 text-white px-1 py-2  rounded-md absolute right-0 top-1/2 transform -translate-y-1/2 mx-2"
             onClick={handleNext}
           >
-            Next
+            &gt;
           </button>
           <button
-            className="bg-gray-800 text-white px-4 py-2 rounded-md absolute left-0 top-1/2 transform -translate-y-1/2"
+            className="outline  outline-lime-500 bg-green-800 hover:bg-lime-600 bg-opacity-0 text-white px-1 py-2 rounded-md absolute left-0 top-1/2 transform -translate-y-1/2 mx-2"
             onClick={handlePrevious}
           >
-            Previous
+            &lt;
           </button>
         </div>
       )}
