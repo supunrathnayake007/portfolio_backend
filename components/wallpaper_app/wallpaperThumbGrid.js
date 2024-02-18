@@ -167,11 +167,14 @@ export default function WallpaperThumbGrid() {
   };
   return (
     <div>
-      <div className="m-1 p-1 w-full flex flex-wrap justify-center">
+      <div className="p-1 w-full flex flex-wrap justify-center">
         {wallpapers.map((wallpaper, index) => (
-          <div key={index} className="relative">
+          <div
+            key={index}
+            className="relative aspect-square w-full xxxs:w-1/3 lg:w-1/6 xl:w-1/8  "
+          >
             <img
-              className="m-0.5 h-40"
+              className="object-cover w-full h-full p-0.5"
               src={"data:image/png;base64," + wallpaper.thumbnail}
               alt={wallpaper.file_name}
               onClick={() => openFullScreen(index)}
@@ -236,6 +239,9 @@ export default function WallpaperThumbGrid() {
           >
             &lt;
           </button>
+          <label className="rounded-md absolute right-0 bottom-0 m-3 bg-slate-300 text-white p-2 bg-opacity-70">
+            Download Count: {wallpapers[currentImageIndex].downloads}
+          </label>
         </div>
       )}
     </div>

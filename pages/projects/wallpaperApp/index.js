@@ -20,21 +20,23 @@ export default function index() {
 
   return (
     <div>
-      <div>
-        <div className="flex justify-center text-7xl">Welcome</div>
-        <div className="flex justify-center text-2xl">
-          Free Mobile Wallpapers Web App
+      <div className="2xl:flex">
+        <div className="2xl:m-4">
+          <div className="flex justify-center text-7xl">Welcome</div>
+          <div className="flex justify-center text-2xl">
+            Free Mobile Wallpapers Web App
+          </div>
         </div>
         <div className="flex justify-center text-lg">
           <button
-            className="m-1 px-2 py-1 bg-yellow-500 rounded hover:bg-yellow-600  text-white "
+            className="m-1 px-2 py-1 bg-yellow-500 rounded hover:bg-yellow-600  text-white 2xl:right-0 2xl:fixed"
             onClick={handleContact}
           >
             Contact Me here
           </button>
         </div>
         <div className="flex justify-center text-[0.7rem]">
-          <div className="text-center">
+          <div className="text-center 2xl:text-left 2xl:items-center">
             Disclaimer: This project is a personal hobby endeavor.
             <br /> I do not own any of the wallpapers featured here, and I
             strongly advise against using them for commercial purposes.
