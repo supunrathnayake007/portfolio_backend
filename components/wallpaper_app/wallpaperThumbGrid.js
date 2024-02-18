@@ -239,7 +239,7 @@ export default function WallpaperThumbGrid() {
           >
             &lt;
           </button>
-          <label className="rounded-md absolute right-0 bottom-0 m-3 bg-slate-300 text-white p-2 bg-opacity-70">
+          <label className="rounded-md absolute right-0 bottom-0 m-3 bg-slate-300 text-white p-2 bg-opacity-70 text-[0.5rem]">
             Download Count: {wallpapers[currentImageIndex].downloads}
           </label>
         </div>
