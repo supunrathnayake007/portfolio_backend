@@ -25,7 +25,7 @@ function Login() {
       toast.error(router.query.message, { autoClose: 5000 });
     }
   }, [router.query.authorized]);
-  debugger;
+  //debugger;
   const updateUserName = (Username) => {
     setUserName(Username);
   };
@@ -46,6 +46,7 @@ function Login() {
   // });
   async function onLoginClick() {
     try {
+      debugger;
       let pushHome = false;
       toast.dark("Authorizing ...", { autoClose: 2000 });
       const loginRes = await fetch("/api/login", {

@@ -4,6 +4,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { Edu_QLD_Beginner, Inter } from "next/font/google";
 import CreatePost from "../components/posts/createPost";
+import ViewPosts from "../components/posts/viewPosts";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -144,8 +145,18 @@ export default function Home() {
                   <CreatePost />
                 </div>
               </div>
+              <div className="flex justify-center">
+                <div className="m-4 lg:w-2/3 xxxs:w-full">
+                  <ViewPosts />
+                </div>
+              </div>
             </div>
           )}
+        </div>
+        <div className="flex justify-center">
+          <div className="m-4 lg:w-2/3 xxxs:w-full">
+            <ViewPosts />
+          </div>
         </div>
       </main>
     </>
