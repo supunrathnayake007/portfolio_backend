@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import HashLoaderC from "../loaders/HashLoaderC";
+import { Helmet } from "react-helmet";
 
 export default function WallpaperThumbGrid() {
   const [wallpapers, setWallpapers] = useState([]);
@@ -189,6 +190,9 @@ export default function WallpaperThumbGrid() {
       {/* Full screen image view */}
       {currentImageIndex !== null && (
         <div className="fixed top-0 left-0 w-full h-full bg-black flex justify-center items-center">
+          <Helmet>
+            <title>SR Wallpapers</title>
+          </Helmet>
           {wpLoading && (
             <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center">
               <div className="relative">

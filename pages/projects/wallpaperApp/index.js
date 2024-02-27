@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import WallpaperUploader from "../../../components/wallpaper_app/wallpaperUploader";
 import WallpaperThumbGrid from "../../../components/wallpaper_app/wallpaperThumbGrid";
-
+import { Helmet } from "react-helmet";
 import { collapseToast } from "react-toastify";
 
 export default function index() {
@@ -20,6 +20,17 @@ export default function index() {
 
   return (
     <div>
+      <Helmet>
+        <title>Free Wallpapers</title>
+        <meta
+          name="description"
+          content="SR Free Wallpaper app, AI generate mobile wallpapers download for free"
+        />
+        <meta
+          name="keyword"
+          content="SR Wallpapers, Free SR, Supun Rathnayake"
+        />
+      </Helmet>
       <div className="2xl:flex">
         <div className="2xl:m-4">
           <div className="flex justify-center text-7xl">Welcome</div>
@@ -36,11 +47,11 @@ export default function index() {
           </button>
         </div>
         <div className="flex justify-center text-[0.7rem]">
-          <div className="text-center 2xl:text-left 2xl:items-center">
+          {/* <div className="text-center 2xl:text-left 2xl:items-center">
             Disclaimer: This project is a personal hobby endeavor.
             <br /> I do not own any of the wallpapers featured here, and I
             strongly advise against using them for commercial purposes.
-          </div>
+          </div> */}
         </div>
       </div>
       <div>{user && <WallpaperUploader userName={user} />}</div>
