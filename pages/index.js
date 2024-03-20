@@ -69,7 +69,13 @@ export default function Home() {
   const wallpapersOnClick = () => {
     window.location.href = "/projects/wallpaperApp";
   };
-
+  const CreateProjectCardOnClick = () => {
+    window.location.href = "/portfolioComps/projects";
+  };
+  const CreateTechsOnClick = () => {
+    window.location.href = "/portfolioComps/createTechs";
+  };
+  let a = 1;
   const logoutOnClick = () => {
     debugger;
     if (!pushLogin.push) {
@@ -108,28 +114,48 @@ export default function Home() {
         <title>SR SMC Project</title>
       </Helmet>
       <main className="min-h-screen bg-slate-400">
-        <div className="flex">
-          <p className="text-1xl font-bold underline">username: {username}</p>
-          <button
-            className="m-1 bg-lime-500 px-2 py-1 rounded hover:bg-lime-600 text-white"
-            onClick={logoutOnClick}
-          >
-            {pushLogin.push ? "Login" : "Logout"}
-          </button>
+        <div className="">
+          <div className="float-right ">
+            <p className="text-1xl font-bold underline ">
+              username: {username}
+            </p>
+            <button
+              className="m-1 bg-lime-500 px-2 py-1 rounded hover:bg-lime-600 text-white"
+              onClick={logoutOnClick}
+            >
+              {pushLogin.push ? "Login" : "Logout"}
+            </button>
+          </div>
           {!pushLogin.push ? (
-            <div className="flex w-full">
-              <button
-                className="m-1 bg-lime-500 px-2 py-1 rounded hover:bg-lime-600 text-white"
-                onClick={userGroupsOnClick}
-              >
-                (test)User Groups
-              </button>
-              <button
-                className="m-1 bg-lime-500 px-2 py-1 rounded hover:bg-lime-600 text-white"
-                onClick={wallpapersOnClick}
-              >
-                (test)wallpapers
-              </button>
+            <div className="flex flex-wrap pt-5 pl-5">
+              <div className="w-full">
+                <button
+                  className="m-1 bg-lime-500 px-2 py-1 rounded hover:bg-lime-600 text-white"
+                  onClick={userGroupsOnClick}
+                >
+                  (test)User Groups
+                </button>
+                <button
+                  className="m-1 bg-lime-500 px-2 py-1 rounded hover:bg-lime-600 text-white"
+                  onClick={wallpapersOnClick}
+                >
+                  (test)wallpapers
+                </button>
+              </div>
+              <div className=" p-1 ">
+                <button
+                  className="m-1 bg-lime-500 px-2 py-1 rounded hover:bg-lime-600 text-white"
+                  onClick={CreateProjectCardOnClick}
+                >
+                  Manage Project Cards
+                </button>
+                <button
+                  className="m-1 bg-lime-500 px-2 py-1 rounded hover:bg-lime-600 text-white"
+                  onClick={CreateTechsOnClick}
+                >
+                  Manage Saved Tachs
+                </button>
+              </div>
             </div>
           ) : (
             ""
